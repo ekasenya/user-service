@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: user-app
+  labels:
+    app: user-app
+spec:
+  containers:
+  - name: user-app
+    image: ekasenya/user-app:v1
+    ports:
+      - containerPort: 8000
