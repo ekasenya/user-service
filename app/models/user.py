@@ -2,7 +2,6 @@ from sqlalchemy import String, Table, Column, Integer
 
 from .metadata import metadata
 
-
 user_account = Table(
     "user_account",
     metadata,

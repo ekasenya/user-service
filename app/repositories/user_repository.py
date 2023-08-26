@@ -1,7 +1,9 @@
 from typing import Optional
+
 from sqlalchemy import insert
-from app.repositories.base_sql_alchemy_repository import BaseSqlAlchemyRepository
+
 from app.models.user import user_account
+from app.repositories.base_sql_alchemy_repository import BaseSqlAlchemyRepository
 from app.schemas.user import User, UserInfo
 
 
