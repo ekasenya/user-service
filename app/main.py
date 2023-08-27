@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 import uvicorn
 from fastapi import FastAPI, Depends, status, Response
@@ -44,6 +45,22 @@ async def create_user(
         )
     except IntegrityError:
         response.status_code = status.HTTP_409_CONFLICT
+
+
+@app.get('/user/{user_id}', response_model=Optional[User])
+async def get_user_by_id(
+        user_id: int,
+        response: Response,
+        user_repository: UserRepository = Depends(get_user_repository),
+):
+    user = await user_repository.get_user_by_id(
+        user_id=user_id
+    )
+
+    if not user:
+        response.status_code = status.HTTP_404_NOT_FOUND
+
+    return user
 
 
 if __name__ == "__main__":
