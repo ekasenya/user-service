@@ -5,6 +5,14 @@ metadata:
 data:
   DB_HOST: postgres
   DB_PORT: '5432'
-  DB_NAME: user-db
-  DB_PASSWORD: user
-  DB_USER: user
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: user-secret
+type: Opaque
+data:
+  DB_NAME: dXNlci1kYg==
+  DB_USER: dXNlcg==
+  DB_PASSWORD: dXNlcg==

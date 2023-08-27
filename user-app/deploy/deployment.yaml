@@ -29,21 +29,11 @@ spec:
                 configMapKeyRef:
                   name: user-config
                   key: DB_PORT
-            - name: DB_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: user-config
-                  key: DB_NAME
-            - name: DB_PASSWORD
-              valueFrom:
-                configMapKeyRef:
-                  name: user-config
-                  key: DB_PASSWORD
-            - name: DB_USER
-              valueFrom:
-                configMapKeyRef:
-                  name: user-config
-                  key: DB_USER
+          envFrom:
+            - configMapRef:
+               name: user-config
+            - secretRef:
+               name: user-secret
           livenessProbe:
             httpGet:
               port: 8000
