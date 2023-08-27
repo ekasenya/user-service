@@ -1,7 +1,8 @@
 import os
 
 import uvicorn
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, status, Response
+from sqlalchemy.exc import IntegrityError
 
 from app.core.deps import get_user_repository
 from app.repositories.user_repository import UserRepository
@@ -28,14 +29,21 @@ async def check_health():
     return {"status": "OK"}
 
 
-@app.post('/user', response_model=User)
-async def create_user(user_info: UserInfo, user_repository: UserRepository = Depends(get_user_repository)):
-    return await user_repository.create_user(
-        user_name=user_info.user_name,
-        first_name=user_info.first_name,
-        last_name=user_info.last_name,
-        email=user_info.email
-    )
+@app.post('/user', response_model=User, status_code=status.HTTP_201_CREATED)
+async def create_user(
+        user_info: UserInfo,
+        response: Response,
+        user_repository: UserRepository = Depends(get_user_repository),
+):
+    try:
+        return await user_repository.create_user(
+            user_name=user_info.user_name,
+            first_name=user_info.first_name,
+            last_name=user_info.last_name,
+            email=user_info.email
+        )
+    except IntegrityError:
+        response.status_code = status.HTTP_409_CONFLICT
 
 
 if __name__ == "__main__":
