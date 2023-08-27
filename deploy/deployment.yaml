@@ -18,6 +18,32 @@ spec:
           ports:
             - name: web
               containerPort: 8000
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: user-config
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: user-config
+                  key: DB_PORT
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: user-config
+                  key: DB_NAME
+            - name: DB_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: user-config
+                  key: DB_PASSWORD
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: user-config
+                  key: DB_USER
           livenessProbe:
             httpGet:
               port: 8000
