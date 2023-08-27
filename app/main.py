@@ -30,7 +30,12 @@ async def check_health():
 
 @app.post('/user', response_model=User)
 async def create_user(user_info: UserInfo, user_repository: UserRepository = Depends(get_user_repository)):
-    return await user_repository.create_user(name=user_info.name, email=user_info.email)
+    return await user_repository.create_user(
+        user_name=user_info.user_name,
+        first_name=user_info.first_name,
+        last_name=user_info.last_name,
+        email=user_info.email
+    )
 
 
 if __name__ == "__main__":

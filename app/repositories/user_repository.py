@@ -10,11 +10,15 @@ from app.schemas.user import User, UserInfo
 class UserRepository(BaseSqlAlchemyRepository):
     async def create_user(
             self,
-            name: str,
+            user_name: str,
+            first_name: Optional[str],
+            last_name: Optional[str],
             email: Optional[str]
     ) -> User:
         insert_command = insert(user_account).values(
-            name=name,
+            user_name=user_name,
+            first_name=first_name,
+            last_name=last_name,
             email=email
         ).returning(user_account)
 
@@ -24,6 +28,9 @@ class UserRepository(BaseSqlAlchemyRepository):
         return User(
             user_id=row.user_id,
             user_info=UserInfo(
-                name=row.name, email=row.email
+                user_name=row.user_name,
+                first_name=row.first_name,
+                last_name=row.last_name,
+                email=row.email
             )
         )

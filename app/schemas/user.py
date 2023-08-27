@@ -4,7 +4,9 @@ from pydantic import BaseModel
 
 
 class UserInfo(BaseModel):
-    name: str
+    user_name: str
+    first_name: Optional[str]
+    last_name: Optional[str]
     email: Optional[str]
 
 
