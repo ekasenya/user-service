@@ -11,7 +11,7 @@ spec:
     - host: arch.homework
       http:
         paths:
-          - path: /user(/|$)(.*)
+          - path: /user-service(/|$)(.*)
             pathType: Prefix
             backend:
               service:
