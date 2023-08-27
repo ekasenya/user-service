@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app.core.deps import get_user_repository
 from app.repositories.user_repository import UserRepository
-from app.schemas.user import UserInfo, User
+from app.schemas.user import UserInfo, User, UserUpdate
 
 app = FastAPI()
 
@@ -55,6 +55,42 @@ async def get_user_by_id(
 ):
     user = await user_repository.get_user_by_id(
         user_id=user_id
+    )
+
+    if not user:
+        response.status_code = status.HTTP_404_NOT_FOUND
+
+    return user
+
+
+@app.delete('/user/{user_id}', response_model=Optional[User])
+async def get_user_by_id(
+        user_id: int,
+        response: Response,
+        user_repository: UserRepository = Depends(get_user_repository),
+):
+    user = await user_repository.delete_user(
+        user_id=user_id
+    )
+
+    if not user:
+        response.status_code = status.HTTP_404_NOT_FOUND
+
+    return user
+
+
+@app.put('/user/{user_id}', response_model=Optional[User])
+async def update_user_by_id(
+        user_id: int,
+        user_update: UserUpdate,
+        response: Response,
+        user_repository: UserRepository = Depends(get_user_repository),
+):
+    user = await user_repository.update_user(
+        user_id=user_id,
+        first_name=user_update.first_name,
+        last_name=user_update.last_name,
+        email=user_update.email
     )
 
     if not user:

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import insert, select, Row
+from sqlalchemy import insert, select, delete, Row
 
 from app.models.user import user_account
 from app.repositories.base_sql_alchemy_repository import BaseSqlAlchemyRepository
@@ -46,6 +46,42 @@ class UserRepository(BaseSqlAlchemyRepository):
 
         async with self._db_connection.begin():
             row = (await self._db_connection.execute(select_command)).one_or_none()
+
+        if not row:
+            return None
+
+        return UserMapper.row_to_user(row)
+
+    async def update_user(
+            self,
+            user_id: int,
+            first_name: Optional[str],
+            last_name: Optional[str],
+            email: Optional[str]
+    ) -> Optional[User]:
+        update_command = (
+            user_account.update().
+            values(
+                first_name=first_name,
+                last_name=last_name,
+                email=email
+            ).
+            where(user_account.c.user_id == user_id)
+        ).returning(user_account)
+
+        async with self._db_connection.begin():
+            row = (await self._db_connection.execute(update_command)).one_or_none()
+
+        if not row:
+            return None
+
+        return UserMapper.row_to_user(row)
+
+    async def delete_user(self, user_id: int) -> Optional[User]:
+        delete_command = delete(user_account).where(user_account.c.user_id==user_id).returning(user_account)
+
+        async with self._db_connection.begin():
+            row = (await self._db_connection.execute(delete_command)).one_or_none()
 
         if not row:
             return None
