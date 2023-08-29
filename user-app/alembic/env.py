@@ -1,3 +1,4 @@
+import os
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
@@ -15,6 +16,16 @@ config = context.config
 # This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
+
+if not config.get_main_option("sqlalchemy.url"):
+    sqlalchemy_url = "postgresql+psycopg2://{user}:{password}@{host}:{port}/{db_name}".format(
+        host=os.environ['DB_HOST'],
+        port=os.environ['DB_PORT'],
+        db_name=os.environ['DB_NAME'],
+        user=os.environ['DB_USER'],
+        password=os.environ['DB_PASSWORD']
+    )
+    config.set_main_option("sqlalchemy.url", sqlalchemy_url)
 
 target_metadata = metadata
 
