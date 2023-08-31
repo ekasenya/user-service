@@ -26,4 +26,4 @@ spec:
               name: user-config-helm
           - secretRef:
               name: user-secret-helm
-      restartPolicy: OnFailure
+      restartPolicy: {{ .Values.job.restartPolicy }}

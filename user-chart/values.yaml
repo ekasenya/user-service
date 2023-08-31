@@ -13,3 +13,11 @@ postgresql:
   postgresqlDatabase: user-db
   service:
       port: "5432"
+
+job:
+  restartPolicy: OnFailure
+
+ingress:
+  host:  arch.homework
+  path: /user-service(/|$)(.*)
+  port: 9000
