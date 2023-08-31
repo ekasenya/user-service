@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: arch.homework
+    - host: arch.homework2
       http:
         paths:
           - path: /user-service(/|$)(.*)
